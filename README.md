@@ -22,7 +22,7 @@
 
     In `Application.java`:
       - Paste `id`, `vid`, `token`, and `sharedLink` as you find.
-      - Set `length` as the amount of seconds divided by 5, then round it up. For example, the `length` of a 2:43 video should be $$(2\times60+43)\div5=33$$.
+      - Set `length` as the amount of seconds divided by 5, then round it up. For example, the `length` of a 2:43 video should be $(2\times60+43)\div5=33$.
       - Run the `main` funciton
       - Wait for result
 
