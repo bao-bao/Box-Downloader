@@ -5,11 +5,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 
-public class VideoDownloader {
+public class VideoDownloader extends Thread {
     String outFile;
     String ffmpegFile;
-    static String videoFolder = "video/1080/";
-    static String audioFolder = "audio/0/";
     static String tempPath = "temp/";
 
     VideoDownloader(String outFile, String ffmpegFile) {
@@ -25,21 +23,16 @@ public class VideoDownloader {
         }
     }
 
-    public void runFFmpeg(String token, String id, String vid, String sharedLink, int length) {
-        String filePath = null;
-        String urlStr = null;
+    public void runFFmpeg(List<List<String>> urlList) {
+        int length = urlList.size();
         deleteTempFiles();
         long start = System.currentTimeMillis();
-        ProgressBar bar = new ProgressBar(length, 30);
-        for (int i = 0; i < length + 1; i++) {
+        ProgressBar bar = new ProgressBar(length-1, 30);
+        for (int i = 0; i < length; i++) {
             bar.showBarByPoint(i);
             try {
-                filePath = i == 0 ? videoFolder + "init.m4s" : videoFolder + i + ".m4s";
-                urlStr = urlBuilder(id, vid, filePath, sharedLink, token);
-                download(urlStr, TYPE.VIDEO, i == length);
-                filePath = i == 0 ? audioFolder + "init.m4s" : audioFolder + i + ".m4s";
-                urlStr = urlBuilder(id, vid, filePath, sharedLink, token);
-                download(urlStr, TYPE.AUDIO, i == length);
+                download(urlList.get(i).get(0), TYPE.AUDIO, false);
+                download(urlList.get(i).get(1), TYPE.VIDEO, i == length-1);
             } catch (IOException e) {
                 bar.finish();
                 System.out.println("Connection Error/File not exist");
@@ -49,15 +42,6 @@ public class VideoDownloader {
         bar.finish();
         ffmpegUtil(tempPath + "video.m4s", tempPath + "audio.m4s", outFile, ffmpegFile);
         System.out.println("Success\ntime spent:" + (System.currentTimeMillis() - start) / 1000.0 + " s");
-    }
-
-    private String urlBuilder(String id, String vid, String filePath, String sharedLink, String token) {
-        return "https://dl.boxcloud.com/api/2.0/internal_files/" + id
-                + "/versions/" + vid
-                + "/representations/dash/content/" + filePath
-                + "?access_token=" + token
-                + "&shared_link=" + sharedLink
-                + "&box_client_name=box-content-preview&box_client_version=2.57.0";
     }
 
     private void download(String urlStr, TYPE type, boolean isLastTime) throws IOException {
@@ -104,9 +88,8 @@ public class VideoDownloader {
                             fileWriter.flush();
                             fileWriter.close();
                         } catch (IOException e) {
-                            System.out.println("Reset " + name + " failed");
+                            System.out.println("Reset " + name + " failed, next video will collapse");
                         }
-                        System.out.println("Delete " + name + " failed, Reset it only");
                     }
 
                 }
@@ -144,7 +127,8 @@ public class VideoDownloader {
 
             try {
                 Process process = processBuilder.start();
-            } catch (IOException e) {
+                process.waitFor();
+            } catch (IOException | InterruptedException e) {
                 e.printStackTrace();
             }
         }
