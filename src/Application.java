@@ -7,7 +7,7 @@ public class Application {
         // where to store videos (this is a directory! NOT forgot the '\\'! Eg, "C:\\output\\")
         String outFolder = "D:\\classes\\EAS501\\output\\";
         // csv file path
-        String csvPath = "url.csv";
+        String csvPath = "csvs/vectors_url.csv";
 
         // ***DO NOT change anything below, neither other code*** //
         CSVReader fileReader = new CSVReader(csvPath);

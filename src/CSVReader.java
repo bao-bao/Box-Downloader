@@ -12,8 +12,10 @@ public class CSVReader {
         try (BufferedReader br = new BufferedReader(new FileReader(filepath))) {
             String line;
             while ((line = br.readLine()) != null) {
-                String[] values = line.trim().split(",");
-                records.add(Arrays.asList(values));
+                if (!line.trim().equals("")) {
+                    String[] values = line.trim().split(",");
+                    records.add(Arrays.asList(values));
+                }
             }
         } catch (IOException e) {
             System.out.println("Read csv file failed");
