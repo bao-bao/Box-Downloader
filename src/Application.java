@@ -14,7 +14,7 @@ public class Application {
         for(List<String> file : fileReader.records) {
             VideoDownloader downloader = new VideoDownloader(outFolder + file.get(0), ffmpegFile);
             URLParser parser = new URLParser(file.get(2), Integer.parseInt(file.get(1)));
-            System.out.println("Start Downloading " + file.get(0) + "\n");
+            System.out.println("Start Downloading " + file.get(0));
             downloader.runFFmpeg(parser.downloadUrlList);
         }
     }
