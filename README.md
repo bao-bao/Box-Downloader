@@ -28,7 +28,7 @@
 
       **Attention: DO NOT add any header in your csv, it should be pure**  
       **Attention: The URL copied from request header will expire uncertainly, please download once you copy them** 
-      > An example of .csv file is also uploaded, named `url.csv`.
+      > Examples of .csv file are under `csvs` folder.
 
    The URL required can be found:
     - Open a video on Box with the inspection open (`F12` for Chrome).  
